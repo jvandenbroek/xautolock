@@ -1,0 +1,4 @@
+**/*.o
+Makefile*
+xautolock
+xautolock._man
