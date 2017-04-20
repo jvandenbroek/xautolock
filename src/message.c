@@ -27,9 +27,12 @@ static Atom semaphore;   /* semaphore property for locating
                             an already running xautolock    */
 static Atom messageAtom; /* message property for talking to
                             an already running xautolock    */
+static Atom statusAtom;  /* property for getting the status of
+                            an already running xautolock    */
 
 #define SEM_PID "_SEMAPHORE_PID"  
 #define MESSAGE "_MESSAGE"       
+#define STATUS  "_STATUS"
 
 /*
  *  Message handlers.
@@ -45,6 +48,7 @@ disableByMessage (Display* d, Window root)
     setLockTrigger (lockTime);
     disableKillTrigger ();
     disabled = True;
+    setStatusAtom(d);
   }
 }
 
@@ -55,6 +59,7 @@ enableByMessage (Display* d, Window root)
   {
     resetTriggers ();
     disabled = False;
+    setStatusAtom(d);
   }
 }
 
@@ -72,6 +77,7 @@ toggleByMessage (Display* d, Window root)
     {
       resetTriggers ();
     }
+    setStatusAtom(d);
   }
 }
 
@@ -207,6 +213,7 @@ getAtoms (Display* d)
 {
   char* sem; /* semaphore property name */
   char* mes; /* message property name   */
+  char* sta; /* status property name    */
   char* ptr; /* iterator                */
 
   sem = newArray (char, strlen (progName) + strlen (SEM_PID) + 1);
@@ -220,6 +227,27 @@ getAtoms (Display* d)
   for (ptr = mes; *ptr; ++ptr) *ptr = (char) toupper (*ptr);
   messageAtom = XInternAtom (d, mes, False);
   free (mes);
+  
+  sta = newArray (char, strlen (progName) + strlen (STATUS) + 1);
+  (void) sprintf (sta, "%s%s", progName, STATUS);
+  for (ptr = sta; *ptr; ++ptr) *ptr = (char) toupper (*ptr);
+  statusAtom = XInternAtom (d, sta, False);
+  free (sta);
+}
+
+/*
+ *  Function for setting the value of status atom.
+ */
+void
+setStatusAtom (Display* d)
+{
+  Window        root;     /* as it says               */
+
+  root = RootWindowOfScreen (ScreenOfDisplay (d, 0));
+
+  (void) XChangeProperty(d, root, statusAtom, XA_INTEGER, 32,
+                         PropModeReplace, (unsigned char*) &disabled,
+                         (int) sizeof (disabled));
 }
 
 /*
@@ -237,6 +265,8 @@ checkConnectionAndSendMessage (Display* d)
   unsigned long nofItems; /* dummy                    */
   unsigned long after;    /* dummy                    */
   pid_t*        contents; /* semaphore property value */
+  long*         property; /* status property contents */
+  int           status;   /* status property value    */
 
   getAtoms (d);
 
@@ -263,6 +293,22 @@ checkConnectionAndSendMessage (Display* d)
     }
     else if (messageToSend)
     {
+      if (messageToSend == msg_status)
+      {
+        (void) XGetWindowProperty(d, root, statusAtom, 0L, 1L, False,
+                                  XA_INTEGER, &type, &format,
+                                  &nofItems, &after, 
+                                  (unsigned char**) &property);
+        if (property != NULL)
+        {
+          status = *(int*) property;
+          (void) XFree ((void*) property);
+          out1 ("Status: %s\n", status ? "disabled" : "enabled");
+          XFlush (d);
+          exit (EXIT_SUCCESS);
+        }
+      }
+
       (void) XChangeProperty (d, root, messageAtom, XA_INTEGER, 
                               8, PropModeReplace, 
 			      (unsigned char*) &messageToSend, 

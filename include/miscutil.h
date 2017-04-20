@@ -33,6 +33,7 @@
 #define MAX(a,b)        ((a) > (b) ? (a) : (b))
 #endif /* MAX */
 
+#define out1(s,a1)      ((void) fprintf (stdout, (s), (a1)))
 #define error0(s)       ((void) fprintf (stderr, (s)))
 #define error1(s,a1)    ((void) fprintf (stderr, (s), (a1)))
 #define error2(s,a1,a2) ((void) fprintf (stderr, (s), (a1), (a2)))

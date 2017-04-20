@@ -117,6 +117,7 @@ main (int argc, char* argv[])
   processOpts (d, argc, argv);
   wmSetup (d);
   checkConnectionAndSendMessage (d);
+  setStatusAtom(d);
   resetTriggers ();
 
   if (!noCloseOut) (void) fclose (stdout);

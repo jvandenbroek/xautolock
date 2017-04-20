@@ -21,7 +21,7 @@ This man page applies to xautolock version 2.2.
 [\fB\-secure\fR]
 [\fB\-resetsaver\fR]
 [\fB\-nocloseout\fR] [\fB\-nocloseerr\fR] [\fB\-noclose\fR]
-[\fB\-disable\fR] [\fB\-enable\fR] [\fB\-toggle\fR] [\fB\-exit\fR]
+[\fB\-disable\fR] [\fB\-enable\fR] [\fB\-toggle\fR] [\fB\-status\fR] [\fB\-exit\fR]
 [\fB\-locknow\fR] [\fB\-unlocknow\fR] [\fB\-nowlocker\fR \fIlocker\fR]
 [\fB\-restart\fR] [\fB\-detectsleep\fR]
 
@@ -244,6 +244,11 @@ Toggles an already running xautolock process (if there is one, and
 it does not have \fB\-secure\fR switched on) between its disabled and
 enabled modes of operation. In any case, the current invocation of
 xautolock exits.
+.TP 
+\fB\-status\fR
+Checks whether an already running xautolock process is in enabled or disabled
+mode of operation and prints that information. In any case, the current 
+invocation of xautolock exits.
 .TP 
 \fB\-exit\fR
 Causes an already running xautolock process (if there is one, and
