@@ -214,6 +214,7 @@ name##Action (Display* d, const char* arg) \
 MESSAGE_ACTION (disable  )
 MESSAGE_ACTION (enable   )
 MESSAGE_ACTION (toggle   )
+MESSAGE_ACTION (status   )
 MESSAGE_ACTION (exit     )
 MESSAGE_ACTION (lockNow  )
 MESSAGE_ACTION (unlockNow)
@@ -517,6 +518,8 @@ static struct
     disableAction      , (optChecker) 0            },
   {"toggle"            , XrmoptionNoArg , (caddr_t) "",
     toggleAction       , (optChecker) 0            },
+  {"status"            , XrmoptionNoArg , (caddr_t) "",
+    statusAction       , (optChecker) 0            },
   {"exit"              , XrmoptionNoArg , (caddr_t) "",
     exitAction         , (optChecker) 0            },
   {"locknow"           , XrmoptionNoArg , (caddr_t) "",
@@ -564,7 +567,7 @@ usage (int exitCode)
   error1 ("%s[-corners xxxx][-cornerdelay secs]\n", blanks);
   error1 ("%s[-cornerredelay secs][-cornersize pixels]\n", blanks);
   error1 ("%s[-nocloseout][-nocloseerr][-noclose]\n", blanks);
-  error1 ("%s[-enable][-disable][-toggle][-exit][-secure]\n", blanks);
+  error1 ("%s[-enable][-disable][-toggle][-status][-exit][-secure]\n", blanks);
   error1 ("%s[-locknow][-unlocknow][-nowlocker locker]\n", blanks);
   error1 ("%s[-restart][-resetsaver][-detectsleep]\n", blanks);
 
@@ -593,6 +596,7 @@ usage (int exitCode)
   error0 (" -enable             : enable a running xautolock.\n");
   error0 (" -disable            : disable a running xautolock.\n");
   error0 (" -toggle             : toggle a running xautolock.\n");
+  error0 (" -status             : check status of a running xautolock.\n");
   error0 (" -locknow            : tell a running xautolock to lock.\n");
   error0 (" -unlocknow          : tell a running xautolock to unlock.\n");
   error0 (" -restart            : tell a running xautolock to restart.\n");

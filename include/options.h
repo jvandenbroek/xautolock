@@ -36,6 +36,7 @@ typedef enum
   msg_disable,   /* disable a running xautolock          */
   msg_enable,    /* enable a running xautolock           */
   msg_toggle,    /* toggle a running xautolock           */
+  msg_status,    /* check status of a running xautolock  */
   msg_exit,      /* kill a running xautolock             */
   msg_lockNow,   /* tell running xautolock to lock now   */
   msg_unlockNow, /* tell running xautolock to unlock now */
