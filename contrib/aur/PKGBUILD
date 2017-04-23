@@ -1,0 +1,27 @@
+# Maintainer: Krzysztof Kopeć <>
+_pkgname=xautolock
+pkgname=xautolock-git
+pkgver=2.2
+pkgrel=1
+pkgdesc="A program that launches a given screen locker for idle X session."
+arch=('i686' 'x86_64')
+url="http://www.ibiblio.org/pub/Linux/X11/screensavers/"
+license=('GPL2')
+depends=('libxss')
+makedepends=('git' 'imake')
+provides=('xautolock')
+conflicts=('xautolock')
+source=("$_pkgname::git+https://github.com/kkopec/xautolock.git")
+md5sums=('SKIP')
+
+build() {
+    cd "$srcdir/$_pkgname" || exit 1
+    xmkmf
+    make
+}
+
+package() {
+    cd "$srcdir/$_pkgname"
+    make DESTDIR="$pkgdir" install
+    make DESTDIR="$pkgdir" install.man
+}
