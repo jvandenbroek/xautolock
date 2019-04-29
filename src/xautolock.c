@@ -163,7 +163,7 @@ main (int argc, char* argv[])
     if (detectSleep)
     {
       t1 = time (NULL);
-      if ((unsigned long) t1 - (unsigned long) t0 > 3) resetLockTrigger ();
+      if ((unsigned long) t1 - (unsigned long) t0 > 3) { resetTriggers () };
       t0 = t1;
     }
   }
